@@ -18,7 +18,7 @@ class Repos
     #[ORM\Column(type: 'string', length: 100)]
     private $name;
 
-    #[ORM\Column(type: 'string', length: 100)]
+    #[ORM\Column(type: 'datetime', length: 100)]
     private $create_date;
 
     #[ORM\Column(type: 'string', length: 100)]
@@ -33,11 +33,12 @@ class Repos
     #[ORM\OneToMany(mappedBy: 'repos', targetEntity: Organisation::class)]
     private $organisations;
 
-    #[ORM\OneToOne(mappedBy: 'repo', targetEntity: Points::class, cascade: ['persist', 'remove'])]
-    private $points;
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private $commits_size;
+
+    #[ORM\Column(type: 'float', nullable: true)]
+    private $points;
 
     public function __construct()
     {

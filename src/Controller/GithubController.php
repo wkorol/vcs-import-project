@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GithubController extends AbstractController
 {
     public function calculatePoints($repo) {
-//        $points = $repo->
+//        $repo->setPoints()
     }
     public function fetchGithubData($url) {
 
