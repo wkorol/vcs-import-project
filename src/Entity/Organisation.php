@@ -22,6 +22,9 @@ class Organisation
     #[ORM\ManyToOne(targetEntity: Repos::class, inversedBy: 'organisations')]
     private $repos;
 
+    #[ORM\Column(type: 'string', length: 100)]
+    private $provider_name;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Organisation
     public function setRepos(?Repos $repos): self
     {
         $this->repos = $repos;
+
+        return $this;
+    }
+
+    public function getProviderName(): ?string
+    {
+        return $this->provider_name;
+    }
+
+    public function setProviderName(string $provider_name): self
+    {
+        $this->provider_name = $provider_name;
 
         return $this;
     }

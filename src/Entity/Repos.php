@@ -36,6 +36,9 @@ class Repos
     #[ORM\OneToOne(mappedBy: 'repo', targetEntity: Points::class, cascade: ['persist', 'remove'])]
     private $points;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private $commits_size;
+
     public function __construct()
     {
         $this->organisations = new ArrayCollection();
@@ -149,6 +152,18 @@ class Repos
         }
 
         $this->points = $points;
+
+        return $this;
+    }
+
+    public function getCommitsSize(): ?int
+    {
+        return $this->commits_size;
+    }
+
+    public function setCommitsSize(?int $commits_size): self
+    {
+        $this->commits_size = $commits_size;
 
         return $this;
     }
