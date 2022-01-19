@@ -13,7 +13,7 @@ class MainController extends AbstractController
     #[Route('/', name: 'main')]
     public function index(RepoRepository $r): Response
     {
-        
+
         $repos = $r->showAllRepos();
 
         return new Response($this->renderView('main/index.html.twig', array(
