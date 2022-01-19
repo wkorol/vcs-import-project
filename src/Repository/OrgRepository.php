@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Organisation;
+use App\Entity\Org;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Organisation|null find($id, $lockMode = null, $lockVersion = null)
- * @method Organisation|null findOneBy(array $criteria, array $orderBy = null)
- * @method Organisation[]    findAll()
- * @method Organisation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Org|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Org|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Org[]    findAll()
+ * @method Org[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OrganisationRepository extends ServiceEntityRepository
+class OrgRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Organisation::class);
+        parent::__construct($registry, Org::class);
     }
 
     // /**
-    //  * @return Organisation[] Returns an array of Organisation objects
+    //  * @return Org[] Returns an array of Org objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class OrganisationRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Organisation
+    public function findOneBySomeField($value): ?Org
     {
         return $this->createQueryBuilder('o')
             ->andWhere('o.exampleField = :val')
@@ -47,4 +47,5 @@ class OrganisationRepository extends ServiceEntityRepository
         ;
     }
     */
+
 }

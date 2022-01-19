@@ -3,27 +3,40 @@ namespace App\Command;
 
 
 //use App\Service\SymfonyDocs;
+use App\Controller\GithubController;
+use App\Entity\Org;
+use App\Entity\Repo;
+use App\Repository\OrgRepository;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\HttpFoundation\Response;
 
 
-class GitCommand extends Command {
+class ImportCommand extends Command {
     protected static $defaultName = 'import:repository';
 
-    /*private $symfonyDocs;
-    public function __construct(SymfonyDocs $symfonyDocs)
+    private $doctrine;
+    private $github_data;
+    public function __construct(ManagerRegistry $doctrine, GithubController $githubController)
     {
-        $this->symfonyDocs = $symfonyDocs;
+        $this->github_data = $githubController;
+        $this->doctrine = $doctrine;
 
         parent::__construct();
-    }*/
+    }
+
 
 
 
     protected function configure()
     {
+
 
         $this->addArgument('username', InputArgument::REQUIRED, 'Organization Name');
         $this->addArgument('provider', InputArgument::REQUIRED, 'Provider Name');
@@ -32,13 +45,79 @@ class GitCommand extends Command {
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        //$username = $input->getArgument('username');
-        //$url = 'https://api.github.com/users/' . $username;
 
-        //$provider = $input->getArgument('provider');
+
+//        $someArray =
+//        $data = file_get_contents($result);
+//        var_dump($data['login']);
+//        $response = file_get_contents($ch);
+//        $data = json_decode($response);
+//        $data2 = get_object_vars($data);
+//        var_dump($data2);
+//        $output->writeln($data['login']);
+//        var_dump($ch);
+//        $data = json_decode($response);
+
+
+
+        $entityManager = $this->doctrine->getManager();
+
+
+
+        $username = $input->getArgument('username');
+        $url = 'https://api.github.com/users/' . $username . '/repos';
+
+
+        $listRepos = [];
+        $i = 0;
+
+
+
+
+        $rep = $this->github_data->fetchData($url);
+
+
+        $organisation = new Org();
+//        $repos = new Repos();
+
+        $organisation->setName($username);
+        foreach ($rep as $r) {
+            $listRepos[$i] = new Repo();
+            $commitsUrl = $r['url'] . '/commits';
+            $pullsUrl = $r['url'] . '/pulls';
+            $listRepos[$i]->setOrg($organisation);
+            $listRepos[$i]->setName($r['name']);
+            $listRepos[$i]->setLink($r['html_url']);
+            try {
+                $date = new DateTime(date('Y-m-d', strtotime($r['created_at'])));
+            } catch (\Exception $e) {
+                $date = NULL;
+            }
+            $listRepos[$i]->setCreateDate($date);
+            $listRepos[$i]->setCommits(sizeof($this->github_data->fetchData($commitsUrl)));
+            $listRepos[$i]->setPulls(sizeof($this->github_data->fetchData($pullsUrl)));
+            $listRepos[$i]->setStars($r['stargazers_count']);
+            $entityManager->persist($listRepos[$i]);
+
+            $listRepos[$i]->setPoints($listRepos[$i]->getCommits() + $listRepos[$i]->getPulls()*1.2 + $listRepos[$i]->getStars() *2);
+
+            $i++;
+        }
+
+
+        $entityManager->persist($organisation);
+        $entityManager->flush();
+
+
+
+
+
+
+//        $organisation->setRepos($listRepos);
         //$test = $this->symfonyDocs->fetchGitHubInformation($url);
 
         //$output->writeln($test);
+
 
 
 

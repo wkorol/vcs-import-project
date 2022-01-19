@@ -1,0 +1,11 @@
+{% block body %}
+
+{#   {{ test }}#}
+
+    {% for t2 in test2  %}
+        <ul>
+
+        <li>{{ t2.org.name }} {{ t2.points }} {{ t2.createdate | date('Y-m-d') }} {{ t2.name }}</li>
+        </ul>
+    {% endfor %}
+{% endblock %}
