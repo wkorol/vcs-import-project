@@ -17,7 +17,7 @@ class MainController extends AbstractController
 //        $test = $org->findOneBy(array('name' => 'wkorol'));
         $test2 = $repo->findByExampleField();
 
-        return new Response($this->renderView('your/template.html.twig', array(
+        return new Response($this->renderView('main/index.html.twig', array(
             // ...
 //            'test' => $test,
             'test2' => $test2

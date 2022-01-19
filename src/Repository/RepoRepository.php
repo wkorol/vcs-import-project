@@ -24,13 +24,11 @@ class RepoRepository extends ServiceEntityRepository
     //  * @return Repo[] Returns an array of Repo objects
     //  */
 
-    public function findByExampleField()
+    public function showAllRepos()
     {
         return $this->createQueryBuilder('r')
 
             ->leftJoin(Org::class, 'o', \Doctrine\ORM\Query\Expr\Join::WITH, 'r.org = o.id')
-//            ->where('o.name = :name')
-//            ->setParameter('name', $value)
             ->orderBy('r.create_date', 'DESC' )
             ->getQuery()->getResult()
 

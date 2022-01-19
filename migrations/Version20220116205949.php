@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * Auto-generated Migration: Please modify to main needs!
  */
 final class Version20220116205949 extends AbstractMigration
 {
@@ -19,13 +19,13 @@ final class Version20220116205949 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        // this up() migration is auto-generated, please modify it to main needs
         $this->addSql('ALTER TABLE repo ADD commits INT DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
+        // this down() migration is auto-generated, please modify it to main needs
         $this->addSql('ALTER TABLE repo DROP commits');
     }
 }

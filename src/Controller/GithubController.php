@@ -21,22 +21,6 @@ class GithubController extends AbstractController
         $rep = json_decode(curl_exec($ch), true);
         curl_close($ch);
 
-//        $response = $this->client->request(
-//            'GET',
-//            $url
-//        );
-//
-//        $statusCode = $response->getStatusCode();
-//         $statusCode = 200;
-//        $contentType = $response->getHeaders()['content-type'][0];
-//         $contentType = 'application/json';
-//        //$organisation_content = $response->getContent();
-//        // $content = '{"id":521583, "name":"symfony-docs", ...}'
-//        $content = $response->toArray();
-
-
-
-        // $content = ['id' => 521583, 'name' => 'symfony-docs', ...]
 
         return $rep;
     }
