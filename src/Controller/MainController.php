@@ -11,16 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/', name: 'main')]
-    public function index(OrgRepository $org, RepoRepository $repo): Response
+    public function index(RepoRepository $r): Response
     {
 
 //        $test = $org->findOneBy(array('name' => 'wkorol'));
-        $test2 = $repo->findByExampleField();
+        $repos = $r->showAllRepos();
 
         return new Response($this->renderView('main/index.html.twig', array(
-            // ...
-//            'test' => $test,
-            'test2' => $test2
+            'repos' => $repos
         )));
     }
 }

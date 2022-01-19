@@ -2,10 +2,10 @@
 
 {#   {{ test }}#}
 
-    {% for t2 in test2  %}
+    {% for r in repos  %}
         <ul>
 
-        <li>{{ t2.org.name }} {{ t2.points }} {{ t2.createdate | date('Y-m-d') }} {{ t2.name }}</li>
+        <li>{{ r.org.name }} {{ r.points }} {{ r.createdate | date('Y-m-d') }} <a href="{{ r.link }}">{{ r.name }}</a></li>
         </ul>
     {% endfor %}
 {% endblock %}

@@ -24,6 +24,9 @@ class Org
     #[ORM\OneToMany(mappedBy: 'org', targetEntity: Repo::class)]
     private $repos;
 
+    #[ORM\Column(type: 'string', length: 100)]
+    private $provider;
+
     public function __construct()
     {
         $this->repos = new ArrayCollection();
@@ -88,4 +91,16 @@ class Org
         return $this;
     }
     public function __toString(){ return $this->name; }
+
+    public function getProvider(): ?string
+    {
+        return $this->provider;
+    }
+
+    public function setProvider(string $provider): self
+    {
+        $this->provider = $provider;
+
+        return $this;
+    }
 }
