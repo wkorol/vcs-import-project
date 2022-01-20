@@ -32,6 +32,9 @@ Required PHP version 8.x.x=>
 
 `http://localhost:8000/`
 
+#API
+`http://localhost:8000/api`
+
 # App Preview
 
 ![preview.png](preview.png)
