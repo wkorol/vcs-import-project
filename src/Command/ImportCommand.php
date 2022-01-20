@@ -38,9 +38,12 @@ class ImportCommand extends Command {
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $output->writeln('Username: '.$input->getArgument('username'));
+
 
         $username = $input->getArgument('username');
         $provider = $input->getArgument('provider');
+
         if (!$this->org_repo->findOneBy(array('name' => $username))) {
             if($this->github->importToDb($username, $provider)) {
                 $output->writeln('Successfully inserted ' . $username . ' repositories to DB');
