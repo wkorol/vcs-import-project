@@ -35,13 +35,6 @@ class RepoRepository extends ServiceEntityRepository
         ;
     }
 
-    public function sortByPoints() {
-        return $this->createQueryBuilder('r')
-            ->leftJoin(Org::class, 'o', \Doctrine\ORM\Query\Expr\Join::WITH, 'r.org = o.id')
-            ->orderBy('r.points', 'ASC')
-            ->getQuery()->getResult()
-            ;
-    }
 
 
 
