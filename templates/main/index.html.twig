@@ -1,14 +1,47 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    
+
+
     <div class="container">
+        <h1 class="text-center">VCS REPO IMPORT</h1>
 {#   {{ test }}#}
 
-    {% for r in repos  %}
-        <ul>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Organisation Name</th>
+                <th scope="col">Repo Name</th>
+                <th scope="col">{{ knp_pagination_sortable(repos, 'Create Date', 'create_date') }}<i class="fas fa-sort"></i></th>
+                <th scope="col">{{ knp_pagination_sortable(repos, 'Trust Points', 'points') }}<i class="fas fa-sort"></i></th>
+            </tr>
+            </thead>
+            <tbody>
 
-        <li>{{ r.org.name }} {{ r.points }} {{ r.createdate | date('Y-m-d') }} <a href="{{ r.link }}">{{ r.name }}</a></li>
-        </ul>
-    {% endfor %}
+
+            {% for r in repos  %}
+
+            <tr>
+                <td>{{ r.org.name }}</td>
+                <td><a href="{{ r.link }}">{{ r.name }}</a></td>
+                <td>{{ r.createdate | date('Y-m-d') }}</td>
+                <td>{{ r.points }}</td>
+            </tr>
+
+            {% endfor %}
+
+
+
+            </tbody>
+        </table>
+
+
+
+
+        <h1 class="text-center">{{ knp_pagination_render(repos) }}</h1>
+
+
     </div>
+
+
+
 {% endblock %}
