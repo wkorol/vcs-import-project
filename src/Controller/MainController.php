@@ -17,7 +17,10 @@ class MainController extends AbstractController
     }
     #[Route('/', name: 'main')]
     public function repoList(PaginatorInterface $paginator, Request $request) {
+        
+        
         $repository = $this->r->showAllRepos();
+        
         return $this->render('main/index.html.twig', [
             'repos' =>  $paginator->paginate($repository, $request->query->getInt('page', 1),10)
         ]);
