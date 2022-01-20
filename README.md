@@ -32,7 +32,8 @@ Required PHP version 8.x.x=>
 
 `http://localhost:8000/`
 
-#API
+# API
+
 `http://localhost:8000/api`
 
 # App Preview
