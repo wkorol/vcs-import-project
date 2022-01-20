@@ -14,9 +14,7 @@ Required PHP version 8.x.x=>
 
 4. Create Database named 'project'
 
--> You can do it by command
-
-`php bin/console doctrine:database:create`
+ You can do it by command: `php bin/console doctrine:database:create`
 
 5. Make migrations
 
