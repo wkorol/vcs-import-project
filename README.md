@@ -1,7 +1,7 @@
-#VCS IMPORT PROJECT
+# VCS IMPORT PROJECT
 Application gets data from Github API and imports to it's own database, then displays the imported data.
 
-##How to run
+## How to run
 Required PHP version 8.x.x=> 
 
 You have to run mysql server
