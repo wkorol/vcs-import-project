@@ -32,7 +32,7 @@ class GithubController extends AbstractController
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json', 'User-Agent: vcs-import-project', 'Authorization: token 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'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json', 'User-Agent: vcs-import-project', 'Authorization: token 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'));
         $rep = json_decode(curl_exec($ch), true);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         if ($httpcode == '404') {
