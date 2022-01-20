@@ -24,6 +24,10 @@ Now check the website
 
 `http://localhost:8000/`
 
+# App Preview
+
+![preview.png](preview.png)
+
 Author
 * **Wiktor Korol** - [wkorol](https://github.com/wkorol)
 
