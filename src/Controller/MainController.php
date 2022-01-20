@@ -13,7 +13,6 @@ class MainController extends AbstractController
     private $r;
     public function __construct(RepoRepository $r) {
         $this->r = $r;
-        $r->sortByPoints();
 
     }
     #[Route('/', name: 'main')]
