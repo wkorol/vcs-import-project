@@ -22,6 +22,12 @@ class GithubController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
+    public function checkTokenExists() : Bool {
+        if($this->getParameter('githubtoken') == '')
+            return false;
+        else return true;
+    }
+
     public function setTrustPoints(int $commits_count, int $pullr_count, int $star_count) : Float {
         return $commits_count + $pullr_count*1.2 + $star_count *2;
     }
@@ -32,8 +38,8 @@ class GithubController extends AbstractController
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $url);
-        $token = $this->getParameter('githubtoken');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json', 'User-Agent: vcs-import-project', 'Authorization: token ' . $token ));
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json', 'User-Agent: vcs-import-project', 'Authorization: token ' . $this->getParameter('githubtoken')));
         $rep = json_decode(curl_exec($ch), true);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         if ($httpcode == '404') {

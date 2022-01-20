@@ -15,7 +15,6 @@ class MainController extends AbstractController
         $this->r = $r;
         $r->sortByPoints();
 
-
     }
     #[Route('/', name: 'main')]
     public function repoList(PaginatorInterface $paginator, Request $request) {
