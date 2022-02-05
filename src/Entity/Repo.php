@@ -4,11 +4,11 @@ namespace App\Entity;
 
 use App\Repository\RepoRepository;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
+use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: RepoRepository::class)]
-#[ApiResource]
-class Repo
+
+class Repo implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -139,6 +139,14 @@ class Repo
         $this->commits = $commits;
 
         return $this;
+    }
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'name' => $this->name,
+            'org' => $this->getOrg()
+        );
     }
 
 }

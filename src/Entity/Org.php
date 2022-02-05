@@ -6,12 +6,12 @@ use App\Repository\OrgRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
+use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: OrgRepository::class)]
-#[ApiResource]
 
-class Org
+
+class Org implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -105,5 +105,12 @@ class Org
         $this->provider = $provider;
 
         return $this;
+    }
+    public function jsonSerialize()
+    {
+        return array(
+            'id' => $this->id,
+            'name' => $this->name
+        );
     }
 }
