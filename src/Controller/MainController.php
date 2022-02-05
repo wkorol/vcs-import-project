@@ -25,6 +25,5 @@ class MainController extends AbstractController
             'repos' =>  $paginator->paginate($repository, $request->query->getInt('page', 1),10)
         ]);
     }
-//
 
 }

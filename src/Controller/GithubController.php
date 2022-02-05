@@ -29,6 +29,10 @@ class GithubController extends AbstractController
         else return true;
     }
 
+    public function changeStatus() {
+        $this->wrongStatus = true;
+    }
+
     public function setTrustPoints(int $commits_count, int $pullr_count, int $star_count) : Float {
         return $commits_count + $pullr_count*1.2 + $star_count *2;
     }
@@ -44,7 +48,7 @@ class GithubController extends AbstractController
                 'User-Agent' =>  'vcs-import-project'
             ],
         ]);
-        
+       
         $rep = $response->getContent();
         $rep = $response->toArray();
 
