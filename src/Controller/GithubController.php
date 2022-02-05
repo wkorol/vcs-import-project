@@ -9,16 +9,17 @@ use DateTime;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GithubController extends AbstractController
 
 {
+    private $client;
     private $doctrine;
 
-    public function __construct(ManagerRegistry $doctrine)
+    public function __construct(HttpClientInterface $client, ManagerRegistry $doctrine)
     {
+        $this->client = $client;
         $this->doctrine = $doctrine;
     }
 
@@ -35,22 +36,22 @@ class GithubController extends AbstractController
 
     public function fetchData($url): array
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $url);
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json', 'User-Agent: vcs-import-project', 'Authorization: token ' . $this->getParameter('githubtoken')));
-        $rep = json_decode(curl_exec($ch), true);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        if ($httpcode == '404') {
-            $rep = [];
-        }
-        curl_close($ch);
-
+        $response = $this->client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => 'token ' . $this->getParameter('githubtoken'),
+                'Content-type' =>  'application/json',
+                'User-Agent' =>  'vcs-import-project'
+            ],
+        ]);
+        
+        $rep = $response->getContent();
+        $rep = $response->toArray();
 
         return $rep;
     }
 
+            
     /**
      * @throws \Exception
      */
