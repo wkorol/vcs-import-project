@@ -7,6 +7,9 @@ parameters:
     githubtoken: '%env(GITHUB_TOKEN)%'
 
 services:
+    App\Services\DBService:
+        arguments:
+            $githubtoken: '%githubtoken%'
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in main services.

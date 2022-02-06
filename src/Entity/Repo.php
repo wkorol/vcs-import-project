@@ -145,7 +145,12 @@ class Repo implements JsonSerializable
         return array(
             'id' => $this->id,
             'name' => $this->name,
-            'org' => $this->getOrg()
+            'org' => $this->getOrg(),
+            'pulls' => $this->pulls,
+            'stars' => $this->stars,
+            'commits' => $this->commits,
+            'trust_points' => $this->points
+            
         );
     }
 

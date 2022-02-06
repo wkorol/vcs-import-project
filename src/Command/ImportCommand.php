@@ -5,8 +5,7 @@ use App\Controller\GithubController;
 
 
 use App\Repository\OrgRepository;
-
-
+use App\Services\DBService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,12 +16,12 @@ use Symfony\Component\Console\Input\InputArgument;
 class ImportCommand extends Command {
     protected static $defaultName = 'import:repository';
 
-    private $githubController;
+    private $dbService;
     private $orgRepository;
-    public function __construct(GithubController $githubController, OrgRepository $orgRepository)
+    public function __construct(DBService $dbService, OrgRepository $orgRepository)
     {
         $this->orgRepository = $orgRepository;
-        $this->githubController = $githubController;
+        $this->dbService = $dbService;
 
 
 
@@ -43,10 +42,10 @@ class ImportCommand extends Command {
         $username = $input->getArgument('username');
         $provider = $input->getArgument('provider');
     
-        if($this->github->checkTokenExists()) {
+        if($this->dbService->checkTokenExists()) {
 
         if (!$this->orgRepository->findOneBy(array('name' => $username))) {
-                if($this->githubController->importToDb($username, $provider)) {
+                if($this->dbService->importToDb($username, $provider)) {
                     $output->writeln('Successfully inserted ' . $username . ' repositories to DB');
                     RETURN COMMAND::SUCCESS;
                 }
