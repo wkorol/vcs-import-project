@@ -41,7 +41,6 @@ class DBService
             ],
         ]);
        
-        $rep = $response->getContent();
         $rep = $response->toArray();
 
         return $rep;
