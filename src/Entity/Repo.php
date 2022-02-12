@@ -7,38 +7,38 @@ use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: RepoRepository::class)]
-
-class Repo implements JsonSerializable
+#[ORM\InheritanceType("SINGLE_TABLE")]
+#[ORM\DiscriminatorColumn(name: "provider", type: "string")]
+#[ORM\DiscriminatorMap(['github' => Github::class, 'bitbucket' => BitBucket::class])]
+abstract class Repo implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\Column(type: 'date', nullable: true)]
+    #[ORM\Column(type: 'datetime')]
     private $create_date;
 
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255)]
     private $link;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $stars;
+    
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: 'integer')]
     private $pulls;
 
-    #[ORM\Column(type: 'float', nullable: true)]
-    private $points;
+    #[ORM\Column(type: 'integer')]
+    private $commits;
 
-    #[ORM\ManyToOne(targetEntity: Org::class, inversedBy: 'repos')]
-    #[ORM\JoinColumn(nullable: false)]
+
+    #[ORM\ManyToOne(targetEntity: Org::class, inversedBy: 'repos', cascade: ['persist'])]
     private $org;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $commits;
+   
 
     public function getId(): ?int
     {
@@ -50,7 +50,7 @@ class Repo implements JsonSerializable
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -62,7 +62,7 @@ class Repo implements JsonSerializable
         return $this->create_date;
     }
 
-    public function setCreateDate(?\DateTimeInterface $create_date): self
+    public function setCreateDate(\DateTimeInterface $create_date): self
     {
         $this->create_date = $create_date;
 
@@ -74,45 +74,34 @@ class Repo implements JsonSerializable
         return $this->link;
     }
 
-    public function setLink(?string $link): self
+    public function setLink(string $link): self
     {
         $this->link = $link;
 
         return $this;
     }
 
-    public function getStars(): ?int
-    {
-        return $this->stars;
-    }
-
-    public function setStars(?int $stars): self
-    {
-        $this->stars = $stars;
-
-        return $this;
-    }
 
     public function getPulls(): ?int
     {
         return $this->pulls;
     }
 
-    public function setPulls(?int $pulls): self
+    public function setPulls(int $pulls): self
     {
         $this->pulls = $pulls;
 
         return $this;
     }
 
-    public function getPoints(): ?float
+    public function getCommits(): ?int
     {
-        return $this->points;
+        return $this->commits;
     }
 
-    public function setPoints(?float $points): self
+    public function setCommits(int $commits): self
     {
-        $this->points = $points;
+        $this->commits = $commits;
 
         return $this;
     }
@@ -129,17 +118,10 @@ class Repo implements JsonSerializable
         return $this;
     }
 
-    public function getCommits(): ?int
-    {
-        return $this->commits;
-    }
+    
 
-    public function setCommits(?int $commits): self
-    {
-        $this->commits = $commits;
+    
 
-        return $this;
-    }
     public function jsonSerialize()
     {
         return array(
@@ -147,11 +129,11 @@ class Repo implements JsonSerializable
             'name' => $this->name,
             'org' => $this->getOrg(),
             'pulls' => $this->pulls,
-            'stars' => $this->stars,
             'commits' => $this->commits,
-            'trust_points' => $this->points
+            
             
         );
     }
+
 
 }

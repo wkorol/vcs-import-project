@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Org;
+use App\Entity\Repo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,6 +19,25 @@ class OrgRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Org::class);
     }
+    
+    
 
+    // /**
+    //  * @return Org[] Returns an array of Org objects
+    //  */
+    
+    
+    
 
+    /*
+    public function findOneBySomeField($value): ?Org
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
 }

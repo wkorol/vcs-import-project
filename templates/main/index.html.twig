@@ -3,7 +3,7 @@
 
 
     <div class="container">
-        <h1 class="text-center">VCS REPO IMPORT</h1>
+        <h1 class="text-center">{{ type }} repositories</h1>
         
         <table class="table table-striped table-hover">
             <thead>
@@ -24,6 +24,7 @@
                 <td><a href="{{ r.link }}">{{ r.name }}</a></td>
                 <td>{{ r.createdate | date('Y-m-d') }}</td>
                 <td>{{ r.points }}</td>
+                
             </tr>
 
             {% endfor %}
@@ -34,13 +35,11 @@
         </table>
         
 
-
-
-
         <h1 class="text-center">{{ knp_pagination_render(repos) }}</h1>
 
 
     </div>
+    
 
 
 

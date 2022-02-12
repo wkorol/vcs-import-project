@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: OrgRepository::class)]
-
-
 class Org implements JsonSerializable
 {
     #[ORM\Id]
@@ -18,17 +16,11 @@ class Org implements JsonSerializable
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
-    private $link;
-
-    #[ORM\OneToMany(mappedBy: 'org', targetEntity: Repo::class)]
+    #[ORM\OneToMany(mappedBy: 'org', targetEntity: Repo::class, cascade: ['persist'])]
     private $repos;
-
-    #[ORM\Column(type: 'string', length: 100)]
-    private $provider;
 
     public function __construct()
     {
@@ -45,21 +37,9 @@ class Org implements JsonSerializable
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getLink(): ?string
-    {
-        return $this->link;
-    }
-
-    public function setLink(?string $link): self
-    {
-        $this->link = $link;
 
         return $this;
     }
@@ -90,19 +70,6 @@ class Org implements JsonSerializable
                 $repo->setOrg(null);
             }
         }
-
-        return $this;
-    }
-    public function __toString(){ return $this->name; }
-
-    public function getProvider(): ?string
-    {
-        return $this->provider;
-    }
-
-    public function setProvider(string $provider): self
-    {
-        $this->provider = $provider;
 
         return $this;
     }
