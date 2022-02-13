@@ -10,27 +10,23 @@ Required PHP version 8.x.x=>
 2. Run command 
 `composer install`
 
-3. Run mysql server 
-
-4. Create Database named 'project'
-
- You can do it by command: `php bin/console doctrine:database:create`
-
-5. Make migrations
+3. Make migrations
 
 `php bin/console doctrine:migrations:migrate`
 
-6. Start the Symfony server
+4. Start the Symfony server
 
-`symfony server:start`
+`php -S 127.0.0.1:8000 -t public`
 
-7. Import repository via command
+5. Import repository via command
 
 `php bin/console import:repository <name> <provider>`
 
-8. Now check the website
+6. Now check the website
 
-`http://localhost:8000/`
+`http://localhost:8000/<provider_name>`
+
+7. If you want to add new provider, you have to create new Entity that will extend Abstract Class of Org. Then you have to create Service of that Provider which will extend DBService class and Interface DBInterface with needed methods. Implement parser of that provider, also you will have to add string array parameter with provider name in services.yaml. 
 
 # API
 
