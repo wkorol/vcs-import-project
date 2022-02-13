@@ -21,23 +21,4 @@ class OrgRepository extends ServiceEntityRepository
     }
     
     
-
-    // /**
-    //  * @return Org[] Returns an array of Org objects
-    //  */
-    
-    
-    
-
-    /*
-    public function findOneBySomeField($value): ?Org
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

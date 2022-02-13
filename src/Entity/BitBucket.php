@@ -34,11 +34,10 @@ class BitBucket extends Repo
 
         return $this->points = $this->getCommits() + $this->getPulls() * 1.4 * 4;
     }
-    public function jsonSerialize()
+    public function jsonSerialize() : mixed
     {        
             return array(
-                ['repo' => parent::jsonSerialize(), 'provider' => 'bitbucket']
-                
+                'repo' => parent::jsonSerialize(), 'provider' => 'bitbucket'
             );
         
             

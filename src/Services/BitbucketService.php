@@ -9,10 +9,11 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+use function PHPUnit\Framework\isEmpty;
+
 class BitbucketService extends DBService implements DBInterface {
 
     private $bitbucketHeaders;
-    private $bitbuckettoken;
     private $bitbucketapiurl;
     
     public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine)
@@ -20,7 +21,6 @@ class BitbucketService extends DBService implements DBInterface {
         $this->client = $client;
         $this->doctrine = $doctrine;
         $this->organisation = new Org();
-        $this->bitbuckettoken = $params->get('bitbuckettoken');
         $this->bitbucketapiurl = $params->get('bitbucketapiurl');
         $this->bitbucketHeaders = [];
         
@@ -33,10 +33,9 @@ class BitbucketService extends DBService implements DBInterface {
     {
         $entityManager = $this->doctrine->getManager();
         $url = $this->bitbucketapiurl . $orgName;
-        $rep = $this->fetchData($url, $this->bitbucketHeaders);
-        if (empty($rep))
+        $rep = $this->fetchData($url, $this->bitbucketHeaders); 
+        if(isEmpty($rep['values']))
             return false;
-        
         $this->organisation->setName($orgName);
 
         foreach ($rep['values'] as $r) {
@@ -58,6 +57,7 @@ class BitbucketService extends DBService implements DBInterface {
         $entityManager->flush();
 
         return true;
+        
     }
     
 }

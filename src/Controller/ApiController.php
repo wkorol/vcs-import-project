@@ -21,6 +21,6 @@ class ApiController extends AbstractController
     public function index() : Response 
     {   
         $data = json_encode($this->r->findAll(), JSON_PRETTY_PRINT);
-        return new Response("<pre>$data</pre>");
+        return new Response("$data");
     }
 }

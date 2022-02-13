@@ -13,7 +13,6 @@ parameters:
 services:
     App\Services\BitbucketService:
         arguments:
-            $bitbuckettoken: '%bitbuckettoken%'
             $bitbucketapiurl: '%bitbucketapiurl%'
     App\Services\GithubService:
         arguments:

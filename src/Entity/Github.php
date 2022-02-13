@@ -49,13 +49,13 @@ class Github extends Repo implements JsonSerializable
     }
     
 
-    public function jsonSerialize()
+    public function jsonSerialize() : mixed
     {
         
         
             
             return array(
-                ['repo' => parent::jsonSerialize(), 'provider' => 'github']
+                'repo' => parent::jsonSerialize(), 'provider' => 'github'
                 
             );
             

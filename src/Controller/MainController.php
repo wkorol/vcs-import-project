@@ -14,12 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     private $doctrine;
-    private $org;
 
-    public function __construct(ManagerRegistry $doctrine, RepoRepository $org) {
+    public function __construct(ManagerRegistry $doctrine) {
         $this->doctrine = $doctrine;
-        $this->org = $org;
-
     }
 
 
@@ -47,9 +44,7 @@ class MainController extends AbstractController
         return $this->render('main/index.html.twig', [
             'type' => 'Bitbucket',
             'repos' => $paginator->paginate($bitbucketRepository, $request->query->getInt('page', 1),10),
-            
-
-            
+                
         ]);
     }
 

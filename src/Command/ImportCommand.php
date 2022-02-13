@@ -2,6 +2,7 @@
 namespace App\Command;
 
 use App\Repository\OrgRepository;
+use App\Repository\RepoRepository;
 use App\Services\BitbucketService;
 use App\Services\GithubService;
 use Symfony\Component\Console\Command\Command;
@@ -14,21 +15,18 @@ class ImportCommand extends Command {
     protected static $defaultName = 'import:repository';
 
     private $githubService;
-    private $orgRepository;
+    private $repoRepository;
     private $bitbucketService;
-    private $dbService;
     private $providers;
     
-    public function __construct(GithubService $githubService, OrgRepository $orgRepository, bitbucketService $bitbucketService, ParameterBagInterface $params)
+    public function __construct(GithubService $githubService, RepoRepository $repoRepository, bitbucketService $bitbucketService, ParameterBagInterface $params)
     {
         $this->params = $params;
-        $this->orgRepository = $orgRepository;
+        $this->repoRepository = $repoRepository;
         $this->githubService = $githubService;
         $this->bitbucketService = $bitbucketService;
         $this->providers = $params->get('providers');
         
-
-    
         parent::__construct();
     }
 
@@ -38,7 +36,6 @@ class ImportCommand extends Command {
         }
         return false;
     }
-
 
     protected function configure()
     {
@@ -50,26 +47,28 @@ class ImportCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        $username = $input->getArgument('username');
+        $orgName = $input->getArgument('username');
         $provider = $input->getArgument('provider');
         
-        if($this->checkProviderExistance($provider)) {
+        if($this->checkProviderExistance($provider) && !$this->repoRepository->findOrgWithProvider($provider, $orgName)) {
             switch(strtolower($provider)) {
                 case 'github':
-                    $this->githubService->importToDb($username);
+                    if(!$this->githubService->importToDb($orgName)) {
+                        return COMMAND::FAILURE;
+                    }
                     break;
                 case 'bitbucket':
-                    $this->bitbucketService->importToDb($username);
+                    if(!$this->bitbucketService->importToDb($orgName)) {
+                        return COMMAND::FAILURE;
+                    }
                     break;
             }
 
-            $output->writeln('Successfully imported ' . $username . ' into the ' . $provider . ' repository.');
+            $output->writeln('Successfully imported ' . $orgName . ' into the ' . $provider . ' repository.');
             return Command::SUCCESS;
         }
-            $output->writeln($provider . ' is not implemented yet.');
+            $output->writeln($provider . ' is not implemented yet, or ' . $orgName . ' is already in DB with this provider');
             return Command::FAILURE;
-        
-
         
     }
     
