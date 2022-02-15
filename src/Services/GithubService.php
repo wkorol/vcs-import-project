@@ -7,6 +7,9 @@ use App\Util\DBInterface;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Config\Framework\RateLimiterConfig;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 use function PHPUnit\Framework\isEmpty;
@@ -16,12 +19,17 @@ class GithubService extends DBService implements DBInterface {
     private $githubHeaders;
     private $githubtoken;
     private $githubapiurl;
+    public $client;
+    public $authenticatedApiLimiter;
+    public $anonymousApiLimiter;
 
 
-    public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine)
+    public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine, RateLimiterFactory $authenticatedApiLimiter, RateLimiterFactory $anonymousApiLimiter)
     {
         $this->client = $client;
         $this->doctrine = $doctrine;
+        $this->authenticatedApiLimiter = $authenticatedApiLimiter;
+        $this->anonymousApiLimiter = $anonymousApiLimiter;
         $this->organisation = new Org();
         $this->githubtoken = $params->get('githubtoken');
         $this->githubapiurl = $params->get('githubapiurl');
@@ -36,11 +44,12 @@ class GithubService extends DBService implements DBInterface {
     
     public function importToDb($orgName): bool
     {
+        
         $entityManager = $this->doctrine->getManager();
         $url = $this->githubapiurl . $orgName . '/repos';
+        
+        
         $rep = $this->fetchData($url, $this->githubHeaders);
-        if(isEmpty($rep))
-            return false;
         $this->organisation->setName($orgName);
         
             
@@ -57,8 +66,10 @@ class GithubService extends DBService implements DBInterface {
                     $this->organisation
                 ));
         }
+        
         $entityManager->persist($this->organisation);
         $entityManager->flush();
+        
 
         return true;
             

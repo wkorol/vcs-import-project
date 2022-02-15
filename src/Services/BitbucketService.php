@@ -7,22 +7,27 @@ use App\Util\DBInterface;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
-use function PHPUnit\Framework\isEmpty;
 
 class BitbucketService extends DBService implements DBInterface {
 
     private $bitbucketHeaders;
     private $bitbucketapiurl;
+    public $authenticatedApiLimiter;
+    public $anonymousApiLimiter;
     
-    public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine)
+    public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine, RateLimiterFactory $authenticatedApiLimiter, RateLimiterFactory $anonymousApiLimiter)
     {
+        $this->authenticatedApiLimiter = $authenticatedApiLimiter;
+        $this->anonymousApiLimiter = $anonymousApiLimiter;
         $this->client = $client;
         $this->doctrine = $doctrine;
         $this->organisation = new Org();
         $this->bitbucketapiurl = $params->get('bitbucketapiurl');
-        $this->bitbucketHeaders = [];
+        $this->bitbucketHeaders = [
+            'Authorization' => ''
+        ];
         
     }
 
@@ -34,8 +39,6 @@ class BitbucketService extends DBService implements DBInterface {
         $entityManager = $this->doctrine->getManager();
         $url = $this->bitbucketapiurl . $orgName;
         $rep = $this->fetchData($url, $this->bitbucketHeaders); 
-        if(isEmpty($rep['values']))
-            return false;
         $this->organisation->setName($orgName);
 
         foreach ($rep['values'] as $r) {
