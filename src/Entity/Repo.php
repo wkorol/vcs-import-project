@@ -39,15 +39,7 @@ abstract class Repo implements JsonSerializable
     private $org;
 
    
-    public function __construct($name, $create_date, $link, $pulls, $commits, $org) {
-        $this->setName($name);
-        $this->setCreateDate($create_date);
-        $this->setLink($link);
-        $this->setPulls($pulls);
-        $this->setCommits($commits);
-        $this->setOrg($org);
-
-    }
+    
 
     public function getId(): ?int
     {

@@ -54,17 +54,19 @@ class GithubService extends DBService implements DBInterface {
         
             
         foreach ($rep as $r) {
+                $github = new Github();
                 $commitsUrl = $r['url'] . '/commits';
                 $pullsUrl = $r['url'] . '/pulls';
-                $this->organisation->addRepo(new Github(
-                    $r['name'],
-                    new DateTime(date('Y-m-d', strtotime($r['created_at']))),
-                    $r['html_url'],
-                    sizeof($this->fetchData($pullsUrl, $this->githubHeaders)),
-                    sizeof($this->fetchData($commitsUrl, $this->githubHeaders)),
-                    $r['stargazers_count'],
-                    $this->organisation
-                ));
+                $github->setName($r['name']);
+                $github->setLink($r['html_url']);
+                $github->setCreateDate(new DateTime(date('Y-m-d', strtotime($r['created_at']))));
+                $github->setPulls(sizeof($this->fetchData($pullsUrl, $this->githubHeaders)));
+                $github->setCommits(sizeof($this->fetchData($commitsUrl, $this->githubHeaders)));
+                $github->setStars($r['stargazers_count']);
+                $github->setOrg($this->organisation);
+                $github->setPoints();
+                $this->organisation->addRepo($github);
+                
         }
         
         $entityManager->persist($this->organisation);

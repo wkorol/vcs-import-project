@@ -42,19 +42,19 @@ class BitbucketService extends DBService implements DBInterface {
         $this->organisation->setName($orgName);
 
         foreach ($rep['values'] as $r) {
+            $bitbucket = new BitBucket();
             $commitsUrl = $r['links']['commits']['href'];
             $pullsUrl = $r['links']['pullrequests']['href'];
             $commitsTemp = $this->fetchData($commitsUrl,$this->bitbucketHeaders);
             $pullsTemp = $this->fetchData($pullsUrl, $this->bitbucketHeaders);
-            $this->organisation->addRepo(new BitBucket(
-                $r['name'],
-                new DateTime(date('Y-m-d', strtotime($r['created_on']))),
-                $r['links']['html']['href'],
-                sizeof($pullsTemp['values']),
-                sizeof($commitsTemp['values']),
-                $this->organisation
-
-            ));
+            $bitbucket->setName($r['name']);
+            $bitbucket->setCreateDate(new DateTime(date('Y-m-d', strtotime($r['created_on']))));
+            $bitbucket->setLink($r['links']['html']['href']);
+            $bitbucket->setPulls(sizeof($pullsTemp['values']));
+            $bitbucket->setCommits(sizeof($commitsTemp['values']));
+            $bitbucket->setOrg($this->organisation);
+            $bitbucket->setPoints();
+            $this->organisation->addRepo($bitbucket);
         }
         $entityManager->persist($this->organisation);
         $entityManager->flush();

@@ -15,18 +15,6 @@ class Github extends Repo implements JsonSerializable
     #[ORM\Column(type: 'integer')]
     private $stars;
 
-    public function __construct($name, $create_date, $link, $pulls, $commits, $stars, $org) {
-        $this->setName($name);
-        $this->setCreateDate($create_date);
-        $this->setLink($link);
-        $this->setPulls($pulls);
-        $this->setCommits($commits);
-        $this->setStars($stars);
-        $this->setOrg($org);
-        $this->setPoints();
-
-    }
-
     public function getPoints(): ?float
     {
         return $this->points;
