@@ -1,7 +1,24 @@
-version: '3'
+version: '3.3'
 
 services:
 ###> doctrine/doctrine-bundle ###
+  base:
+    build:
+      context: ./
+      dockerfile: docker/base/Dockerfile
+    image: vcs-import-api-base
+  application:
+    build:
+      context: ./
+      dockerfile: docker/dev/Dockerfile
+    image: vcs-import-api-backend
+    volumes:
+      - ./docker/dev/vhost.conf:/etc/apache2/sites-enabled/000-default.conf
+      - .:/home/vcs-import-project
+    ports:
+      - "8888:80"
+    networks:
+      - default
   database:
     image: postgres:${POSTGRES_VERSION:-13}-alpine
     environment:
@@ -11,6 +28,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-symfony}
     volumes:
       - db-data:/var/lib/postgresql/data:rw
+
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all main data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
