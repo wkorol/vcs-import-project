@@ -1,1 +1,1 @@
-FROM  vcs-import-api-base as vcs-import-api-backend
+FROM  vcs-import-project-api-base as vcs-import-project-api-backend

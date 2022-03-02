@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.0'
 
 services:
 ###> doctrine/doctrine-bundle ###
@@ -6,15 +6,16 @@ services:
     build:
       context: ./
       dockerfile: docker/base/Dockerfile
-    image: vcs-import-api-base
+    image: vcs-import-project-api-base
   application:
     build:
       context: ./
       dockerfile: docker/dev/Dockerfile
-    image: vcs-import-api-backend
+    image: vcs-import-project-api-backend
     volumes:
       - ./docker/dev/vhost.conf:/etc/apache2/sites-enabled/000-default.conf
-      - .:/home/vcs-import-project
+      - .:/home/vcs-import/project
+      - .htaccess:/var/www/html/.htaccess
     ports:
       - "8888:80"
     networks:
