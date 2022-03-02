@@ -14,8 +14,7 @@ services:
     image: vcs-import-project-api-backend
     volumes:
       - ./docker/dev/vhost.conf:/etc/apache2/sites-enabled/000-default.conf
-      - .:/home/vcs-import/project
-      - .htaccess:/var/www/html/.htaccess
+      - .:/home/vcs-import-project
     ports:
       - "8888:80"
     networks:

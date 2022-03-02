@@ -5,7 +5,7 @@ RUN docker-php-ext-install pdo pdo_pgsql
 RUN groupadd --gid 1000 vcs-import-project \
   && useradd --uid 1000 --gid vcs-import-project --shell /bin/bash --create-home vcs-import-project
 
-RUN docker-php-ext-install opcache zip
+RUN docker-php-ext-install opcache zip sysvsem
 
 COPY --from=composer:2.1.14 /usr/bin/composer /usr/bin/composer
 
