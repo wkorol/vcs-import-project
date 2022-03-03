@@ -1,6 +1,7 @@
 <?php
 namespace App\Command;
 
+use App\Message\ImportCommandCreator;
 use App\Repository\OrgRepository;
 use App\Repository\RepoRepository;
 use App\Services\BitbucketService;
@@ -19,10 +20,12 @@ class ImportCommand extends Command
     private $repoRepository;
     private $providers;
     private $importCommandCreator;
+    private $bus;
 
-    public function __construct(MessageBusInterface $importCommandCreator, RepoRepository $repoRepository, ParameterBagInterface $params)
+    public function __construct(MessageBusInterface $bus, ImportCommandCreator $importCommandCreator, RepoRepository $repoRepository, ParameterBagInterface $params)
     {
         $this->importCommandCreator = $importCommandCreator;
+        $this->bus = $bus;
         $this->params = $params;
         $this->repoRepository = $repoRepository;
 
@@ -38,11 +41,6 @@ class ImportCommand extends Command
             return true;
         }
         return false;
-    }
-
-    protected function importCommandCreator()
-    {
-
     }
 
     protected function configure()
@@ -64,8 +62,8 @@ class ImportCommand extends Command
 
         //$this->bitbucketService->importToDb($orgName);
 
-        //$importCommand = $this->importCommandCreator->create($input->getArgument('username'), $input->getArgument('provider'));
-        //$this->bus->dispatch($importCommand);
+        $importCommand = $this->importCommandCreator->create($input->getArgument('username'), $input->getArgument('provider'));
+        $this->bus->dispatch($importCommand);
 
         return COMMAND::SUCCESS;
     }
