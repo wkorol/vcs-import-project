@@ -65,7 +65,13 @@ class ImportCommand extends Command
 
         //$this->bitbucketService->importToDb($orgName);
 
-        $importCommand = $this->importCommandCreator->create($input->getArgument('username'), $input->getArgument('provider'));
+        try {
+            $importCommand = $this->importCommandCreator->create($input->getArgument('username'), 
+            $input->getArgument('provider'));
+        } catch (ProviderNotFound $exceptioin) {
+            $output->writeln($provider . 'is not implemented yet in our system.')
+            return Command::FAILURE; 
+        }
         $this->bus->dispatch($importCommand);
 
         return COMMAND::SUCCESS;
