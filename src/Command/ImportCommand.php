@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class ImportCommand extends Command {
     protected static $defaultName = 'import:repository';
@@ -18,9 +19,11 @@ class ImportCommand extends Command {
     private $repoRepository;
     private $bitbucketService;
     private $providers;
-    
-    public function __construct(GithubService $githubService, RepoRepository $repoRepository, bitbucketService $bitbucketService, ParameterBagInterface $params)
+    private $importCommandCreator;
+
+    public function __construct(MessageBusInterface $bus , GithubService $githubService, RepoRepository $repoRepository, bitbucketService $bitbucketService, ParameterBagInterface $params)
     {
+        $this->importCommandCreator = $bus;
         $this->params = $params;
         $this->repoRepository = $repoRepository;
         $this->githubService = $githubService;
@@ -35,6 +38,9 @@ class ImportCommand extends Command {
             return true;
         }
         return false;
+    }
+    protected function importCommandCreator() {
+
     }
 
     protected function configure()
@@ -63,6 +69,10 @@ class ImportCommand extends Command {
                     }
                     break;
             }
+
+            $importCommand = $this->importCommandCreator->create($input->getArgument('username'), $input->getArgument('provider'));
+            $this->bus->dispatch($importCommand);
+
 
             $output->writeln('Successfully imported ' . $orgName . ' into the ' . $provider . ' repository.');
             return Command::SUCCESS;
