@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\MessageHandler;
+use App\Message\BitbucketImportCommand;
 use App\Message\ImportCommandCreator;
 use App\Services\BitbucketService;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -14,7 +15,8 @@ class BitbucketImportCommandHandler implements MessageHandlerInterface {
         $this->bitbucketService = $bitbucketService;
     }
 
-    public function __invoke(BitbucketImportCommandHandler $command) {
+    public function __invoke(BitbucketImportCommand $command) {
+        $this->bitbucketService->importToDb($command->getOrgName());
 
 
     }
