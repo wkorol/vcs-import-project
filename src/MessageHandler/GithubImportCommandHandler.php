@@ -12,7 +12,7 @@ class GithubImportCommandHandler implements MessageHandlerInterface {
 
     }
     public function __invoke() {
-        //test
+        //test//
     }
 
 }
