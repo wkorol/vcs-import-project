@@ -19,8 +19,6 @@ class MainController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-
-
     #[Route('/github', name: 'github')]
     public function githubList(PaginatorInterface $paginator, Request $request) {
         $entityManager = $this->doctrine->getManager();

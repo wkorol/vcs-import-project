@@ -9,33 +9,22 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class ImportCommand extends Command
 {
     protected static $defaultName = 'import:repository';
 
-    private $providers;
-    private $importCommandCreator;
-    private $bus;
+    private ImportCommandCreator $importCommandCreator;
+    private MessageBusInterface $bus;
 
-    public function __construct(MessageBusInterface $bus, ImportCommandCreator $importCommandCreator, ParameterBagInterface $params)
+    public function __construct(MessageBusInterface $bus, ImportCommandCreator $importCommandCreator)
     {
         $this->importCommandCreator = $importCommandCreator;
         $this->bus = $bus;
 
-        $this->providers = $params->get('providers');
 
         parent::__construct();
-    }
-
-    public function checkProviderExistance($providerName): bool
-    {
-        if (in_array(strtolower($providerName), $this->providers)) {
-            return true;
-        }
-        return false;
     }
 
     protected function configure()
