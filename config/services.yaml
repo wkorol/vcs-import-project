@@ -11,10 +11,10 @@ parameters:
     providers: ['github', 'bitbucket']
 
 services:
-    App\Services\BitbucketService:
+    App\MessageHandler\BitbucketImportCommandHandler:
         arguments:
             $bitbucketapiurl: '%bitbucketapiurl%'
-    App\Services\GithubService:
+    App\MessageHandler\GithubImportCommandHandler:
         arguments:
             $githubtoken: '%githubtoken%'
             $githubapiurl: '%githubapiurl%'

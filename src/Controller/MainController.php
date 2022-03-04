@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Repo;
-use App\Repository\RepoRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
