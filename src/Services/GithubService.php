@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Entity\Github;
@@ -7,22 +8,21 @@ use App\Util\DBInterface;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Config\Framework\RateLimiterConfig;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-use function PHPUnit\Framework\isEmpty;
 
-class GithubService extends DBService implements DBInterface {
-
-    private $githubHeaders;
-    private $githubtoken;
-    private $githubapiurl;
-    public $client;
-    public $authenticatedApiLimiter;
-    public $anonymousApiLimiter;
-
+class GithubService extends DBService implements DBInterface
+{
+    private array $githubHeaders;
+    private string $githubtoken;
+    private string $githubapiurl;
+    public HttpClientInterface $client;
+    public RateLimiterFactory $authenticatedApiLimiter;
+    public RateLimiterFactory $anonymousApiLimiter;
+    private ManagerRegistry $doctrine;
+    private Org $organisation;
 
     public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine, RateLimiterFactory $authenticatedApiLimiter, RateLimiterFactory $anonymousApiLimiter)
     {
@@ -39,20 +39,17 @@ class GithubService extends DBService implements DBInterface {
             'User-Agent' => 'vcs-import-project'
         
         );
-        
     }
     
     public function importToDb($orgName): bool
     {
-        
         $entityManager = $this->doctrine->getManager();
         $url = $this->githubapiurl . $orgName . '/repos';
         
         
         $rep = $this->fetchData($url, $this->githubHeaders);
         $this->organisation->setName($orgName);
-        
-            
+
         foreach ($rep as $r) {
                 $github = new Github();
                 $commitsUrl = $r['url'] . '/commits';
@@ -71,13 +68,7 @@ class GithubService extends DBService implements DBInterface {
         
         $entityManager->persist($this->organisation);
         $entityManager->flush();
-        
 
         return true;
-            
     }
-
 }
-
-
-?>

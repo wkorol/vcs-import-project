@@ -8,6 +8,4 @@ class ProviderNotFound extends \InvalidArgumentException
     {
         parent::__construct($provider. 'as a provider has not been found');
     }
-
-
 }
