@@ -16,7 +16,10 @@ class BitbucketService extends DBService implements DBInterface {
     private $bitbucketapiurl;
     public $authenticatedApiLimiter;
     public $anonymousApiLimiter;
-    
+    private Org $organisation;
+    private ManagerRegistry $doctrine;
+    private HttpClientInterface $client;
+
     public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine, RateLimiterFactory $authenticatedApiLimiter, RateLimiterFactory $anonymousApiLimiter)
     {
         $this->authenticatedApiLimiter = $authenticatedApiLimiter;

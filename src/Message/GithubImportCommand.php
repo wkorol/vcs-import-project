@@ -6,14 +6,14 @@ namespace App\Message;
 
 class GithubImportCommand
 {
-    private string $username;
+    private string $orgName;
 
-    public function __construct(string $username)
+    public function __construct(string $orgName)
     {
-        $this->username = $username;
+        $this->orgName = $orgName;
     }
     public function getOrgName(): string
     {
-        return $this->username;
+        return $this->orgName;
     }
 }

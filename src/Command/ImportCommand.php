@@ -23,7 +23,6 @@ class ImportCommand extends Command
         $this->importCommandCreator = $importCommandCreator;
         $this->bus = $bus;
 
-
         parent::__construct();
     }
 
