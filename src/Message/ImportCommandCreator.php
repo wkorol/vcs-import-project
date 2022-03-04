@@ -6,19 +6,23 @@ namespace App\Message;
 
 use App\Command\ProviderNotFound;
 
-
-class ImportCommandCreator
+class ImportCommandCreator implements ImportCommandFactory
 {
-    public function create(string $orgName, string $provider)
+    private array $factories = [];
+
+    public function registerFactory(string $provider, ImportCommandFactory $factory): void
     {
-        if ($provider === 'github')
-        {
-            return new GithubImportCommand($orgName);
-        }
-        if($provider === 'bitbucket')
-        {
-            return new BitbucketImportCommand($orgName);
-        }
-        throw new ProviderNotFound($provider);
+        $this->factories[$provider] = $factory;
     }
+
+    public function create(string $orgName, string $provider): ImportCommand
+    {
+        if (!isset($this->factories[$provider]))
+        {
+            throw new ProviderNotFound($provider);
+        }
+
+        return $this->factories[$provider]->create($orgName, $provider);
+    }
+
 }
