@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Message;
 
+use App\Command\ProviderNotFound;
 use App\MessageHandler\BitbucketImportCommandHandler;
 use App\MessageHandler\GithubImportCommandHandler;
+
 
 class ImportCommandCreator {
     public function create($username, $provider) {
@@ -15,5 +17,6 @@ class ImportCommandCreator {
         if($provider == 'bitbucket') {
             return new BitbucketImportCommand($username);
         }
+        throw new ProviderNotFound($provider);
     }
 }
