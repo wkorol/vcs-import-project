@@ -28,9 +28,13 @@ Application gets data from Github API and imports to it's own database, then dis
 7. If you want to add new provider, you have to create new Entity that will extend Abstract Class of Org. Then you have to create Service of that Provider in MessageHandler. Then it's important to add a call in services.yaml file example:
 
 `App\Message\ImportCommandCreator:`
+
 `calls:`
+
 `.....`
+
 `.....`
+
 `- ['registerFactory', ['name','@App\Message\nameImportCommandFactory']]`
 
 
