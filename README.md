@@ -1,5 +1,5 @@
 # VCS IMPORT PROJECT
-Application gets data from Github API and imports to it's own database, then displays the imported data.
+Application gets data from Github API and Bitbucket API via symfony command and imports to it's own database, then displays the imported data in the tables. App has also it's own API. 
 
 ## How to run
 
