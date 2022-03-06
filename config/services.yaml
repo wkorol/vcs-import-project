@@ -11,10 +11,10 @@ parameters:
     providers: ['github', 'bitbucket']
 
 services:
-    App\Services\BitbucketService:
+    App\MessageHandler\BitbucketImportCommandHandler:
         arguments:
             $bitbucketapiurl: '%bitbucketapiurl%'
-    App\Services\GithubService:
+    App\MessageHandler\GithubImportCommandHandler:
         arguments:
             $githubtoken: '%githubtoken%'
             $githubapiurl: '%githubapiurl%'
@@ -27,7 +27,7 @@ services:
         
 
     # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
+    # this creates a service per class whose id is the fully-qualified class i
     App\:
         resource: '../src/'
         exclude:
@@ -36,5 +36,9 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
 
+    App\Message\ImportCommandCreator:
+        calls:
+            - ['registerFactory', ['github', '@App\Message\GithubImportCommandFactory']]
+            - ['registerFactory', ['bitbucket', '@App\Message\BitbucketImportCommandFactory']]
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

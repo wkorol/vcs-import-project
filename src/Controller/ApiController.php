@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Repository\OrgRepository;
 use App\Repository\RepoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,11 +9,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends AbstractController
 {
-    private $r;
+    private RepoRepository $r;
     
-    public function __construct(RepoRepository $r) {
+    public function __construct(RepoRepository $r)
+    {
         $this->r = $r;
-
     }
 
     #[Route('/api', name: 'api')]

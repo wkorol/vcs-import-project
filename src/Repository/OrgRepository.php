@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Org;
-use App\Entity\Repo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +18,4 @@ class OrgRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Org::class);
     }
-    
-    
 }
