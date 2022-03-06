@@ -38,7 +38,7 @@ class GithubImportCommandHandler extends DBService implements MessageHandlerInte
         $this->githubtoken = $params->get('githubtoken');
         $this->githubapiurl = $params->get('githubapiurl');
         $this->githubHeaders = array(
-            'Authorization' => 'token ' . $this->githubtoken,
+            'Authorization' =>  (!empty($this->githubtoken)  ? 'token ' . $this->githubtoken  : ''),
             'Content-Type' => 'application/json',
             'User-Agent' => 'vcs-import-project'
 
@@ -53,7 +53,8 @@ class GithubImportCommandHandler extends DBService implements MessageHandlerInte
         $rep = $this->fetchData($url, $this->githubHeaders);
         $this->organisation->setName($orgName);
 
-        foreach ($rep as $r) {
+        foreach ($rep as $r) 
+        {
             $github = new Github();
             $commitsUrl = $r['url'] . '/commits';
             $pullsUrl = $r['url'] . '/pulls';

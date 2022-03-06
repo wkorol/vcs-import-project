@@ -26,7 +26,6 @@ abstract class Repo implements JsonSerializable
     #[ORM\Column(type: 'string', length: 255)]
     private $link;
 
-    
 
     #[ORM\Column(type: 'integer')]
     private $pulls;
@@ -39,8 +38,6 @@ abstract class Repo implements JsonSerializable
     private $org;
 
    
-    
-
     public function getId(): ?int
     {
         return $this->id;

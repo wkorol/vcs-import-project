@@ -25,7 +25,8 @@ class MainController extends AbstractController
         $entityManager = $this->doctrine->getManager();
         $githubRepository = $entityManager->getRepository(Repo::class)->findOfType('github');
 
-        return $this->render('main/index.html.twig', [
+        return $this->render('main/index.html.twig', 
+        [
             'type' => 'github',
             'repos' =>  $paginator->paginate($githubRepository, $request->query->getInt('page', 1),10),
             
@@ -37,7 +38,8 @@ class MainController extends AbstractController
         $entityManager = $this->doctrine->getManager();
         $bitbucketRepository = $entityManager->getRepository(Repo::class)->findOfType('bitbucket');
 
-        return $this->render('main/index.html.twig', [
+        return $this->render('main/index.html.twig', 
+        [
             'type' => 'Bitbucket',
             'repos' => $paginator->paginate($bitbucketRepository, $request->query->getInt('page', 1),10),
                 
