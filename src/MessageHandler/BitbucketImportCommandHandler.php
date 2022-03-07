@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\MessageHandler;
 use App\Entity\BitBucket;
 use App\Entity\Org;
+use App\Entity\Repo;
 use App\Message\BitbucketImportCommand;
 use App\Repository\RepoRepository;
 use App\Services\DBService;
@@ -47,11 +48,11 @@ class BitbucketImportCommandHandler extends DBService implements MessageHandlerI
 
     public function importToDb($orgName): bool
     {
+        $entityManager = $this->doctrine->getManager();
         if ($this->repoRepository->findOrgWithProvider('bitbucket', $orgName))
         {
-            throw new OrgFound($orgName);
+            $entityManager->getRepository(Repo::class)->deleteOfType('bitbucket');
         }
-        $entityManager = $this->doctrine->getManager();
         $url = $this->bitbucketapiurl . $orgName;
         $rep = $this->fetchData($url, $this->bitbucketHeaders);
         $this->organisation->setName($orgName);

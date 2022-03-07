@@ -42,7 +42,7 @@ class GithubImportCommandHandler extends DBService implements MessageHandlerInte
         $this->githubtoken = $params->get('githubtoken');
         $this->githubapiurl = $params->get('githubapiurl');
         $this->githubHeaders = array(
-            'Authorization' =>  (!empty($this->githubtoken)  ? 'token ' . $this->githubtoken  : ''),
+            'Authorization' =>  (!empty($this->githubtoken)  ? ('token ' . $this->githubtoken)  : ''),
             'Content-Type' => 'application/json',
             'User-Agent' => 'vcs-import-project'
 
@@ -50,13 +50,14 @@ class GithubImportCommandHandler extends DBService implements MessageHandlerInte
     }
     public function importToDb($orgName): bool
     {
-        if ($this->repoRepository->findOrgWithProvider('github', $orgName))
-        {
-            throw new OrgFound($orgName);
-        }
-
 
         $entityManager = $this->doctrine->getManager();
+
+
+        if ($this->repoRepository->findOrgWithProvider('github', $orgName))
+        {
+            $entityManager->getRepository(Repo::class)->deleteOfType('github');
+        }
         $url = $this->githubapiurl . $orgName . '/repos';
 
 

@@ -27,6 +27,15 @@ class RepoRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function deleteOfType($provider)
+    {
+        $qb = $this->createQueryBuilder('r');
+        $qb->where('r INSTANCE OF :provider');
+        $qb->setParameter('provider', $provider);
+        $qb->delete();
+        $qb->getQuery()->execute();
+    }
+
     public function findOrgWithProvider($provider, $orgName)
     {
         return $this->createQueryBuilder('r')
