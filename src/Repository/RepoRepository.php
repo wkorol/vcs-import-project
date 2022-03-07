@@ -30,20 +30,26 @@ class RepoRepository extends ServiceEntityRepository
 
     public function deleteOfType($provider, $orgName)
     {
-        $qb = $this->createQueryBuilder('r');
-        $qb->innerJoin(Org::class, 'o', Join::WITH, 'r.org = o.id');
-        $qb->where('r INSTANCE OF :provider');
-        $qb->andWhere('o.name = :orgName');
-        $qb->setParameter('orgName', $orgName);
-        $qb->setParameter('provider', $provider);
-        $qb->delete()->getQuery()->execute();
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            DELETE FROM repo
+            USING org
+            WHERE repo.provider = :provider
+            AND org.name = :orgName
+            ';
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery(['provider' => $provider, 'orgName' => $orgName]);
+
+        return $resultSet->fetchAllAssociative();
+
     }
 
     public function findOrgWithProvider($provider, $orgName)
     {
         return $this->createQueryBuilder('r')
             
-            ->innerJoin(Org::class, 'o', Join::WITH, 'r.org = o.id')
+            ->innerJoin(Org::class, 'o', \Doctrine\ORM\Query\Expr\Join::WITH, 'r.org = o.id')
             ->where('r INSTANCE OF :provider')
             ->andWhere('o.name = :orgName')
             ->setParameter('provider', $provider)
