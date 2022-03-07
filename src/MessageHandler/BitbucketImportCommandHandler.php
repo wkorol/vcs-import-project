@@ -5,6 +5,7 @@ namespace App\MessageHandler;
 use App\Entity\BitBucket;
 use App\Entity\Org;
 use App\Message\BitbucketImportCommand;
+use App\Repository\RepoRepository;
 use App\Services\DBService;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,12 +23,14 @@ class BitbucketImportCommandHandler extends DBService implements MessageHandlerI
     private Org $organisation;
     private ManagerRegistry $doctrine;
     public HttpClientInterface $client;
+    private RepoRepository $repoRepository;
 
-    public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine, RateLimiterFactory $authenticatedApiLimiter, RateLimiterFactory $anonymousApiLimiter)
+    public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine, RateLimiterFactory $authenticatedApiLimiter, RateLimiterFactory $anonymousApiLimiter, RepoRepository $repoRepository)
     {
         $this->authenticatedApiLimiter = $authenticatedApiLimiter;
         $this->anonymousApiLimiter = $anonymousApiLimiter;
         $this->client = $client;
+        $this->repoRepository = $repoRepository;
         $this->doctrine = $doctrine;
         $this->organisation = new Org();
         $this->bitbucketapiurl = $params->get('bitbucketapiurl');
@@ -44,6 +47,10 @@ class BitbucketImportCommandHandler extends DBService implements MessageHandlerI
 
     public function importToDb($orgName): bool
     {
+        if ($this->repoRepository->findOrgWithProvider('bitbucket', $orgName))
+        {
+            throw new OrgFound($orgName);
+        }
         $entityManager = $this->doctrine->getManager();
         $url = $this->bitbucketapiurl . $orgName;
         $rep = $this->fetchData($url, $this->bitbucketHeaders);

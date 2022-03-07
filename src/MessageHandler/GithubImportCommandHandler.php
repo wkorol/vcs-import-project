@@ -6,7 +6,9 @@ namespace App\MessageHandler;
 
 use App\Entity\Github;
 use App\Entity\Org;
+use App\Entity\Repo;
 use App\Message\GithubImportCommand;
+use App\Repository\RepoRepository;
 use App\Services\DBService;
 
 use DateTime;
@@ -26,14 +28,16 @@ class GithubImportCommandHandler extends DBService implements MessageHandlerInte
     public RateLimiterFactory $authenticatedApiLimiter;
     public RateLimiterFactory $anonymousApiLimiter;
     private ManagerRegistry $doctrine;
+    private RepoRepository $repoRepository;
     private Org $organisation;
 
-    public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine, RateLimiterFactory $authenticatedApiLimiter, RateLimiterFactory $anonymousApiLimiter)
+    public function __construct(ParameterBagInterface $params, HttpClientInterface $client, ManagerRegistry $doctrine, RateLimiterFactory $authenticatedApiLimiter, RateLimiterFactory $anonymousApiLimiter, RepoRepository $repoRepository)
     {
         $this->client = $client;
         $this->doctrine = $doctrine;
         $this->authenticatedApiLimiter = $authenticatedApiLimiter;
         $this->anonymousApiLimiter = $anonymousApiLimiter;
+        $this->repoRepository = $repoRepository;
         $this->organisation = new Org();
         $this->githubtoken = $params->get('githubtoken');
         $this->githubapiurl = $params->get('githubapiurl');
@@ -46,6 +50,12 @@ class GithubImportCommandHandler extends DBService implements MessageHandlerInte
     }
     public function importToDb($orgName): bool
     {
+        if ($this->repoRepository->findOrgWithProvider('github', $orgName))
+        {
+            throw new OrgFound($orgName);
+        }
+
+
         $entityManager = $this->doctrine->getManager();
         $url = $this->githubapiurl . $orgName . '/repos';
 
