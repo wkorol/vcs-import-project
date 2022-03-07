@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Org;
 use App\Entity\Repo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -27,20 +28,22 @@ class RepoRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function deleteOfType($provider)
+    public function deleteOfType($provider, $orgName)
     {
         $qb = $this->createQueryBuilder('r');
+        $qb->innerJoin(Org::class, 'o', Join::WITH, 'r.org = o.id');
         $qb->where('r INSTANCE OF :provider');
+        $qb->andWhere('o.name = :orgName');
+        $qb->setParameter('orgName', $orgName);
         $qb->setParameter('provider', $provider);
-        $qb->delete();
-        $qb->getQuery()->execute();
+        $qb->delete()->getQuery()->execute();
     }
 
     public function findOrgWithProvider($provider, $orgName)
     {
         return $this->createQueryBuilder('r')
             
-            ->innerJoin(Org::class, 'o', \Doctrine\ORM\Query\Expr\Join::WITH, 'r.org = o.id')
+            ->innerJoin(Org::class, 'o', Join::WITH, 'r.org = o.id')
             ->where('r INSTANCE OF :provider')
             ->andWhere('o.name = :orgName')
             ->setParameter('provider', $provider)

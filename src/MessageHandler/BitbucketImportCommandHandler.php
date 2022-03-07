@@ -51,7 +51,7 @@ class BitbucketImportCommandHandler extends DBService implements MessageHandlerI
         $entityManager = $this->doctrine->getManager();
         if ($this->repoRepository->findOrgWithProvider('bitbucket', $orgName))
         {
-            $entityManager->getRepository(Repo::class)->deleteOfType('bitbucket');
+            $this->repoRepository->deleteOfType('bitbucket', $orgName);
         }
         $url = $this->bitbucketapiurl . $orgName;
         $rep = $this->fetchData($url, $this->bitbucketHeaders);

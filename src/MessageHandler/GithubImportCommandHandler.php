@@ -56,7 +56,7 @@ class GithubImportCommandHandler extends DBService implements MessageHandlerInte
 
         if ($this->repoRepository->findOrgWithProvider('github', $orgName))
         {
-            $entityManager->getRepository(Repo::class)->deleteOfType('github');
+            $this->repoRepository->deleteOfType('github', $orgName);
         }
         $url = $this->githubapiurl . $orgName . '/repos';
 
