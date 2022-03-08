@@ -6,7 +6,6 @@ namespace App\MessageHandler;
 
 use App\Entity\Github;
 use App\Entity\Org;
-use App\Entity\Repo;
 use App\Message\GithubImportCommand;
 use App\Repository\RepoRepository;
 use App\Services\DBService;
@@ -50,9 +49,7 @@ class GithubImportCommandHandler extends DBService implements MessageHandlerInte
     }
     public function importToDb($orgName): bool
     {
-
         $entityManager = $this->doctrine->getManager();
-
 
         if ($this->repoRepository->findOrgWithProvider('github', $orgName))
         {
